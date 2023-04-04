@@ -19,3 +19,4 @@ I have only tested this up to 200x200 pixels which worked fine.,
 - numpy
 - pyzbar
 - tkinter
+- tqdm
