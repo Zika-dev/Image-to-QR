@@ -49,13 +49,6 @@ def encode_qr():
 
 # Detect QR
 def decode_qr(iterations, width, height):
-    while True:
-        anim = input("Animate read? ")
-        anim = anim.upper()
-        if anim != "Y" and anim != "N":
-            print("Invalid choice!")
-            continue
-        break
     image = []
     preview = np.zeros((height, width), dtype=np.uint8)
     for i in tqdm(range(iterations)):
@@ -66,13 +59,12 @@ def decode_qr(iterations, width, height):
         except:
             print("Failed to read data")
             exit()
-        if anim == "Y":
-            decoded_data = np.hstack(image).astype(np.uint8)
-            start_row = i * 700 // width
-            end_row = min((i + 1) * 700 // width, height)
-            preview[start_row:end_row, :] = decoded_data[start_row*width:end_row*width].reshape(end_row-start_row, width)
-            cv2.imshow("image", preview)
-            cv2.waitKey(100)
+        decoded_data = np.hstack(image).astype(np.uint8)
+        start_row = i * 700 // width
+        end_row = min((i + 1) * 700 // width, height)
+        preview[start_row:end_row, :] = decoded_data[start_row*width:end_row*width].reshape(end_row-start_row, width)
+        cv2.imshow("image", preview)
+        cv2.waitKey(1)
 
     # Restore the image
     decoded_data = np.hstack(image).astype(np.uint8)
