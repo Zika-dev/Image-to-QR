@@ -2,12 +2,12 @@
 Turn images into QR codes!
 
 ## About
-This program takes an image input, rescales it to your desired resolution (1:1) and turns it into grayscale. After that the pixel values are split up into different QR codes.
+This program takes an image input, rescales it to your desired resolution and turns it into grayscale. After that the pixel values are split up into different QR codes.
  
 It can also decode the QR codes back into the image!
  
 ## Note
-I have only tested this up to 200x200 pixels which worked fine.
+Should work fine with any resolution. 200x200 = 67 QR codes. 100x50 = 9 QR codes.
 
 ## Requirements
 
