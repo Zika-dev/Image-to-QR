@@ -7,7 +7,7 @@ This program takes an image input, rescales it to your desired resolution and tu
 It can also decode the QR codes back into the image!
  
 ## Note
-Should work fine with any resolution. 200x200 = 67 QR codes. 100x50 = 9 QR codes.
+Should work fine with any resolution. 200x200 = 58 QR codes. 100x50 = 8 QR codes.
 
 The "animation" feature looks weird while it's decoding but after it's fully read the QR codes it will look fine.
 ## Requirements
