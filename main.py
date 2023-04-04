@@ -20,22 +20,20 @@ def encode_qr():
     img = cv2.imread(img_path)
     img = cv2.resize(img, (width,height), interpolation = cv2.INTER_AREA)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    print("###")
-    print(f"Array size: [{img.nbytes}]")
+    print(f"\nArray size: [{img.nbytes}]")
     cv2.imwrite("original.png", img)
     img = np.floor(img / 2.56).astype(np.uint8)
     # Create QR
     y=0
-    iterations = int(np.ceil(img.nbytes/600))
+    iterations = int(np.ceil(img.nbytes/700))
     if (iterations < 1):
         iterations=1
-    #os.system("cls")
     print(f"{width}x{height}")
     print(f"Required QR codes: {iterations}")
     for i in tqdm(range(iterations)):
-        data_chunk = img.ravel()[y:y+600].tolist()
+        data_chunk = img.ravel()[y:y+700].tolist()
         if i == iterations-1:
-            data_chunk.extend([0] * (600 - len(data_chunk)))
+            data_chunk.extend([0] * (700 - len(data_chunk)))
         qr = qrcode.QRCode(
         version=40,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -46,12 +44,11 @@ def encode_qr():
         qr.make(fit=True)
         qr_img = qr.make_image(fill_color="black", back_color="white")
         qr_img.save(f"qr_codes/qr{i}.png")
-        y=y+600
+        y=y+700
     print("Done!")
 
 # Detect QR
 def decode_qr(iterations, width, height):
-
     while True:
         anim = input("Animate read? ")
         anim = anim.upper()
