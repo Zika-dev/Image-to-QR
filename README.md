@@ -9,6 +9,8 @@ It can also decode the QR codes back into the image!
 ## Note
 This program uses version 1 QR codes!
 
+I have only tested this up to 200x200 pixels which worked fine.,
+
 ## Requirements
 
 - Python 3.9
