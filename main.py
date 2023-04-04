@@ -50,7 +50,7 @@ def encode_qr():
         qr.add_data(img[x:y].tolist())
         qr.make(fit=True)
         qr_img = qr.make_image(fill_color="black", back_color="white")
-        qr_img.save(f"qr{i}.png")
+        qr_img.save(f"qr_codes/qr{i}.png")
         x = x+element_count
         y = y+element_count
     print("Done!")
@@ -66,7 +66,7 @@ def decode_qr(iterations):
         break
     image = []
     for i in tqdm(range(iterations)):
-        decoded_image = cv2.imread(f"qr{i}.png")
+        decoded_image = cv2.imread(f"qr_codes/qr{i}.png")
         data = decode(decoded_image)
         try:
             image.append(eval(data[0].data.decode()))
