@@ -57,6 +57,7 @@ def decode_qr(iterations, width, height):
             continue
         break
     image = []
+    preview = np.zeros((height, width), dtype=np.uint8)
     for i in tqdm(range(iterations)):
         decoded_image = cv2.imread(f"qr_codes/qr{i}.png")
         data = decode(decoded_image)
@@ -66,8 +67,11 @@ def decode_qr(iterations, width, height):
             print("Failed to read data")
             exit()
         if anim == "Y":
-            decoded_data = np.vstack(image).astype(np.uint8)
-            cv2.imshow("image", decoded_data)
+            decoded_data = np.hstack(image).astype(np.uint8)
+            start_row = i * 700 // width
+            end_row = min((i + 1) * 700 // width, height)
+            preview[start_row:end_row, :] = decoded_data[start_row*width:end_row*width].reshape(end_row-start_row, width)
+            cv2.imshow("image", preview)
             cv2.waitKey(100)
 
     # Restore the image
