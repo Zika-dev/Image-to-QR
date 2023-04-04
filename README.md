@@ -7,9 +7,7 @@ This program takes an image input, rescales it to your desired resolution (1:1) 
 It can also decode the QR codes back into the image!
  
 ## Note
-This program uses version 1 QR codes!
-
-I have only tested this up to 200x200 pixels which worked fine.,
+I have only tested this up to 200x200 pixels which worked fine.
 
 ## Requirements
 
