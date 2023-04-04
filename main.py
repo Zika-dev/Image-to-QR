@@ -5,7 +5,7 @@ import os
 from pyzbar.pyzbar import decode
 from tkinter import filedialog
 import tkinter as tk
-
+from tqdm import tqdm
 
 root = tk.Tk()
 root.withdraw()
@@ -40,7 +40,7 @@ def encode_qr():
     os.system("cls")
     print(f"{width_height}x{width_height}")
     print(f"Required QR codes: {iterations}")
-    for i in range (iterations):
+    for i in tqdm(range(iterations)):
         qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -48,7 +48,6 @@ def encode_qr():
         border=4,
         )
         qr.add_data(img[x:y].tolist())
-        print(f"QR#{i}")
         qr.make(fit=True)
         qr_img = qr.make_image(fill_color="black", back_color="white")
         qr_img.save(f"qr{i}.png")
@@ -66,8 +65,7 @@ def decode_qr(iterations):
             continue
         break
     image = []
-    for i in range(iterations):
-        print(f"Reading QR#{i}")
+    for i in tqdm(range(iterations)):
         decoded_image = cv2.imread(f"qr{i}.png")
         data = decode(decoded_image)
         try:
@@ -97,7 +95,7 @@ while True:
         print("Invalid choice!")
         continue
     break
-
+os.system("cls")
 if task == "ENCODE":
     encode_qr()
 else:
