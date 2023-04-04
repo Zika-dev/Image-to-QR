@@ -15,48 +15,43 @@ detector = cv2.QRCodeDetector()
 def encode_qr():
     # Pre processing
     img_path = filedialog.askopenfilename()
-    width_height = int(input("Enter resolution (1:1): "))
+    width = int(input("Enter width: "))
+    height = int(input("Enter height: "))
     img = cv2.imread(img_path)
-    img = cv2.resize(img, (width_height,width_height), interpolation = cv2.INTER_AREA)
+    img = cv2.resize(img, (width,height), interpolation = cv2.INTER_AREA)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    #img = np.floor(img / 2.56).astype(np.uint8)
+    print("###")
     print(f"Array size: [{img.nbytes}]")
     cv2.imwrite("original.png", img)
-
+    img = np.floor(img / 2.56).astype(np.uint8)
     # Create QR
-    element_count = 10
-    x = 0
-    y = element_count
-    while True:
-        if (img[x:y].nbytes > 500):
-            print(f"QR_SIZE: {img[0:element_count].nbytes}")
-            print("Too large!")
-            element_count = element_count-1
-            y=element_count
-            continue
-        break
-
-    iterations = int(width_height/element_count)
-    os.system("cls")
-    print(f"{width_height}x{width_height}")
+    y=0
+    iterations = int(np.ceil(img.nbytes/600))
+    if (iterations < 1):
+        iterations=1
+    #os.system("cls")
+    print(f"{width}x{height}")
     print(f"Required QR codes: {iterations}")
     for i in tqdm(range(iterations)):
+        data_chunk = img.ravel()[y:y+600].tolist()
+        if i == iterations-1:
+            data_chunk.extend([0] * (600 - len(data_chunk)))
         qr = qrcode.QRCode(
-        version=1,
+        version=40,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=10,
         border=4,
         )
-        qr.add_data(img[x:y].tolist())
+        qr.add_data(data_chunk)
         qr.make(fit=True)
         qr_img = qr.make_image(fill_color="black", back_color="white")
         qr_img.save(f"qr_codes/qr{i}.png")
-        x = x+element_count
-        y = y+element_count
+        y=y+600
     print("Done!")
 
 # Detect QR
-def decode_qr(iterations):
+def decode_qr(iterations, width, height):
+
     while True:
         anim = input("Animate read? ")
         anim = anim.upper()
@@ -78,8 +73,10 @@ def decode_qr(iterations):
             cv2.imshow("image", decoded_data)
             cv2.waitKey(100)
 
-    # Vertically concatenate the decoded arrays
-    decoded_data = np.vstack(image).astype(np.uint8)
+    # Restore the image
+    decoded_data = np.hstack(image).astype(np.uint8)
+    decoded_data = decoded_data[:width*height].reshape(height, width)
+    decoded_data = np.floor(decoded_data * 2.56).astype(np.uint8)
 
     # Display the decoded image
     cv2.imwrite("decoded_image.png", decoded_data)
@@ -99,5 +96,7 @@ os.system("cls")
 if task == "ENCODE":
     encode_qr()
 else:
+    width = int(input("Enter width: "))
+    height = int(input("Enter height: "))
     iterations = int(input("Enter QR amount: "))
-    decode_qr(iterations)
+    decode_qr(iterations, width, height)
