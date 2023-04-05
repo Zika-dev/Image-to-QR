@@ -69,7 +69,7 @@ def decode_qr(iterations, width, height):
     # Restore the image
     decoded_data = np.hstack(image).astype(np.uint8)
     decoded_data = decoded_data[:width*height].reshape(height, width)
-    decoded_data = np.floor(decoded_data * 2.57).astype(np.uint8)
+    decoded_data = np.ceil(decoded_data * 2.57).astype(np.uint8)
 
     # Display the decoded image
     cv2.imwrite("decoded_image.png", decoded_data)
